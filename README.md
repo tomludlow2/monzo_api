@@ -71,3 +71,7 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - If the token is authorised, will display this as a badge
 - It token is invalid - requires redirection to index to restart process
 
+**refresh_access_token.php**
+- Very similar opeartion to get_access_token (see above) but changes refresh token instead of temporary token
+- Updated styling
+- Redirects to hub once completed
