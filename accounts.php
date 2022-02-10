@@ -126,10 +126,6 @@
     <meta name="generator" content="Hugo 0.84.0">
     <title>RPI-Monzo - Accounts</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
-
-    
-
     <!-- Bootstrap core CSS -->
 <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
 

@@ -99,7 +99,7 @@
 			];
 		foreach($op as $key => $value) {
 			if( in_array($key, ["current_balance", "current_total_balance", "daily_spend"]) ){
-				$r .= "<tr><td>" . $desc[$key] . "</td><td>&pound;" . ($value/100) . "</td></tr>";			
+				$r .= "<tr><td>" . $desc[$key] . "</td><td>&pound;" . number_format(($value/100),2) . "</td></tr>";			
 			}
 		}
 		$r .= "</table>";
