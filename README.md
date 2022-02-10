@@ -95,3 +95,11 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - If called with ```?store=0``` then it will not push the data to the server (Useful for comparing old->new data)
 - The HTML version allows you to display both a tabulated and json version of the data side by side
 
+**pots.php**
+- This function has various functions
+- It simply first calls the monzo API using the information stored in the database
+- If pots are returned, it will generate a specific page
+- If called with ```?format=json``` then it will output the information in json
+- If called with ```?store=0``` then it will not push the data to the server (Useful for comparing old->new data)
+- When formatted as a page, it generates a series of Bootstrap cards, one for each pot, aligning on default row/col structure
+- You can also add ```?show_deleted``` to show any deleted pots (will affect both json and page modes)
