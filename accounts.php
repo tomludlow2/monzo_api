@@ -51,6 +51,7 @@
 	if( $op['num_accounts'] >= 1 ) {
 		//Currently only works for a sinle account
 		$account = $accounts[0];
+		$op['success'] = 1;
 		#Get the important bits:
 		$ib['account_id'] = $account['id'];
 		$ib['account_number'] = $account['account_number'];
@@ -81,7 +82,7 @@
 			$url = "index.php";
 			$display_json = 0;
 		}else {			
-			$title = "Relevant Account Info";
+			$title = "Monzo Account Information";
 			$body = gen_table($op);
 			$json_pre = "<pre class='text-start'>" . json_encode($op, JSON_PRETTY_PRINT) . "</pre>";
 			$button_text = "Return to Hub";
@@ -146,6 +147,10 @@
           font-size: 3.5rem;
         }
       }
+
+      body {
+      	display: block !important;
+      }
     </style>
 
     
@@ -161,7 +166,7 @@
     	
 
    	<div class="row">
-   		<div class="col mb-3" style='<?php if(!$display_json) echo "width: 50%;"?>'>
+   		<div class="col mb-3">
 			<div class="card text-center">
 				<div class="card-header">Account Information</div>
 				<div class="card-body">

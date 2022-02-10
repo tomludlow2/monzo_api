@@ -85,3 +85,13 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - If called with ```?format=json``` then it will output the information in json
 - If called with ```?store=0``` then it will not push the data to the server (Useful for comparing old->new data)
 - The HTML version allows you to display both a tabulated and json version of the data side by side
+
+
+**balance.php**
+- This function has various functions
+- It simply first calls the monzo API using the information stored in the database
+- If balances are returned, it will generate a specific page
+- If called with ```?format=json``` then it will output the information in json
+- If called with ```?store=0``` then it will not push the data to the server (Useful for comparing old->new data)
+- The HTML version allows you to display both a tabulated and json version of the data side by side
+
