@@ -32,7 +32,6 @@ I have tried to organise this in the order in which they will run.
 - ~~updated from old setup.php~~
 - Generates a link for monzo that initiates the setup process
 - This is in the form of:
-- 
 ```
   https://auth.monzo.com/?client_id=oauth2client_your_client_id&redirect_uri=your_redirect_uri&response_type=code&state=state_token
 ```
@@ -46,13 +45,11 @@ I have tried to organise this in the order in which they will run.
 
 **get_access_token.php**
 - Posts a variety of information to Monzo
-- 
 ```
 $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 ```
 - Note that the redirect_uri is standard across the api, but is not specifically needed
 - Receives a json_enocded object:
-- 
 ```
 {
     "access_token": "access_token",

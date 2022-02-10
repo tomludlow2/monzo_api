@@ -1,17 +1,18 @@
 <?php
-	
+
 	require "conn.php";
-	$authorisation_code = get_data($conn, "temporary_code");
 	$client_id = get_data($conn, "client_id");
 	$client_secret = get_data($conn, "client_secret");
 	$redirect_uri = get_data($conn, "redirect_uri");
-	$grant_type = "authorization_code";
+	$grant_type = "refresh_token";
+	$refresh_token = get_data($conn, "refresh_token");
 
 	$url = "https://api.monzo.com/oauth2/token";
 
 	$response = httpPost($url,
-		array("grant_type"=>"authorization_code","client_id"=>$client_id, "client_secret"=>$client_secret, "redirect_uri"=>$redirect_uri, "code"=>$authorisation_code)
+		array("grant_type"=>$grant_type,"client_id"=>$client_id, "client_secret"=>$client_secret, "redirect_uri"=>$redirect_uri, "refresh_token"=>$refresh_token)
 	);
+
 
 	$resp = json_decode($response, true);
 
@@ -88,25 +89,23 @@
 
 	if( ($a+$b+$c+$d) == 4 ) {
 		//All correct - proceed
-		$title = "Token Exchange Success";
-		$body = "<p>The exchange process correctly converted your temporary access token to an authentication token, and is now ready for the next stage</p>";
+		$title = "Token Refresh Success";
+		$body = "<p>The exchange process correctly refreshed your refresh token to a new authentication token, and is now ready for the next stage</p>";
 		$body .= generate_table($a,$b,$c,$d);
-		$url = "whoami.php";
-		$button_text = "Validate Credentials";
+		$url = "hub.php";
+		$button_text = "Operations Hub";
 		$button_class = "btn-primary";
 
 	}else {
 		//An error!
-		$title = "Token Exchange Failure";
-		$body = "<p>There was an error converting the temporary access token to an authentication token.</p>";
+		$title = "Token Refresh Failure";
+		$body = "<p>There was an error converting the refresh token to an authentication token.</p>";
 		$body .= generate_table($a,$b,$c,$d);
 		$url = "index.php";
 		$button_text = "Restart";
 		$button_class = "btn-warning";
 	}
 
-
-	//using php curl (sudo apt-get install php-curl) 
 	function httpPost($url, $data){
 	    $curl = curl_init($url);
 	    curl_setopt($curl, CURLOPT_POST, true);
@@ -119,6 +118,7 @@
 
 ?>
 
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -127,7 +127,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
-    <title>RPI-Monzo - Token Exchnge</title>
+    <title>RPI-Monzo - Refresh Token?</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
 
@@ -162,22 +162,16 @@
   <form>
     <img class="mb-4" src="assets/brand/rpi_cloud.svg" alt="" width="72" height="72">
     <h1 class="display-5 mb-3 fw-normal">Monzo API Integration</h1>
-    <p class="lead">Access Token Exchange</h1>
+    <p class="lead">Refresh Access Token</h1>
     
 	<div class="card text-center">
-		<div class="card-header">Outcome of Exchange</div>
+		<div class="card-header">Outcome of Operation</div>
 		<div class="card-body">
 			<h5 class="card-title"><?php echo $title; ?></h5>
 			<p class="card-text"><?php echo $body; ?></p>
 			<a href="<?php echo $url; ?>" class="btn <?php echo $button_class;?>"><?php echo $button_text;?></a>
 		</div>
-		<hr/>
-		<h5 class="card-title" style='<?php if(($a+$b+$c+$d)!=4)echo "display: none;"?>'>Important</h5>
-		<div class="card-body"  style='<?php if(($a+$b+$c+$d)!=4)echo "display: none;"?>'>
-			<p class="card-text">You have been sent a Monzo Notification to allow the app to access info now. Please respond to this</p>
-		</div>
 		<div class="card-footer text-muted">Monzo API Integration</div>
-
 	</div>
     <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
   </form>
@@ -187,4 +181,3 @@
     
   </body>
 </html>
-

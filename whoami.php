@@ -25,9 +25,9 @@
 	if( $resp['authenticated'] == true) {
 		$title = "Token Validated";
 		$body = "The token is <span class=\"badge bg-success\">Validated</span> and is okay to use. Note that this does not mean that it can be used to <span class=\"badge bg-info\">Manipulate</span> data yet, the user needs to validate this in the app first";
-		$url = "";
+		$url = "hub.php";
 		$button_class = "btn-primary";
-		$button_text = "Proceed to Options Page";
+		$button_text = "Proceed to Operations Hub";
 
 	}else {
 		$title = "Token Failed";
