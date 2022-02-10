@@ -6,15 +6,17 @@ This file give the workflow from user opening the app, through to using the comp
 This is a work in progress, and should only be enabled on a hardened server due to the nature of the content.
 
 ## Overview
-
-
+- This api uses OAuth 2.0 to connect to the API and verify credentials
+- There is a database that holds both your API's information, as well as the user information when the user registers for the first time
+- The registration requires the user to visit your API -> Redirects to Monzo -> Emails user -> User verifies
+- At this point you have a token that you can make requests with
+- This token does not permit you to do anything specific at that stage
+- Instead the user will be pinged from the Monzo App and will have to put in their PIN to get your system access
 
 ## Setup
 - You will need a Monzo Account (obviously
 - You will need a database (I am using a MySQL database)
 - [ ] I will try and copy a blank example SQL insert **later**
-
-
 
 
 ## Specific Files
@@ -75,3 +77,11 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - Very similar opeartion to get_access_token (see above) but changes refresh token instead of temporary token
 - Updated styling
 - Redirects to hub once completed
+
+**accounts.php*
+- This function has various functions
+- It simply first calls the monzo API using the information stored in the database
+- If an account is returned, it will generate a specific page
+- If called with ```?format=json``` then it will output the information in json
+- If called with ```?store=0``` then it will not push the data to the server (Useful for comparing old->new data)
+- The HTML version allows you to display both a tabulated and json version of the data side by side
