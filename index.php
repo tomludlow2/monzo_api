@@ -1,3 +1,28 @@
+<?php
+
+	#ToDO:
+	/*
+	If user already has account, this should redirect the landing page
+	*/
+
+	require "conn.php";
+	$new_user = 0;
+
+	if($new_user) {
+		//Generate new state token and store it
+		$state = 0;
+	}else {
+		//As this is currently just for one user, the state token has already been generated
+		$state = get_data($conn, "state");
+	}
+
+	$client_id = get_data($conn, "client_id");
+	$redirect_uri = get_data($conn, "redirect_uri");
+	$response_type = "code";
+
+	$url = "https://auth.monzo.com/?client_id=$client_id&redirect_uri=$redirect_uri&response_type=code&state=$state";
+
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -43,22 +68,9 @@
     <h1 class="h3 mb-3 fw-normal">Monzo API Integration</h1>
     <p>Welcome to the Monzo API Integration - designed to allow you to import your monzo history live into other applications & manipulate the data as requried</p>
     <p>To commence, click the button below</p>
+    
+    <a href="<?php echo $url;?>" class="btn btn-success" role="button">Sign in</a>
 
-    <div class="form-floating">
-      <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-      <label for="floatingInput">Email address</label>
-    </div>
-    <div class="form-floating">
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-      <label for="floatingPassword">Password</label>
-    </div>
-
-    <div class="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"> Remember me
-      </label>
-    </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
     <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
   </form>
 </main>
