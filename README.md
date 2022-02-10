@@ -12,7 +12,7 @@ This is a work in progress, and should only be enabled on a hardened server due 
 ## Setup
 - You will need a Monzo Account (obviously
 - You will need a database (I am using a MySQL database)
-- [ ]I will try and copy a blank example SQL insert **later**
+- [ ] I will try and copy a blank example SQL insert **later**
 
 
 
