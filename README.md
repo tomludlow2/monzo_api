@@ -21,9 +21,10 @@ This is a work in progress, and should only be enabled on a hardened server due 
 I have tried to organise this in the order in which they will run. 
 
 **conn.php**
-Contains the DB connect in ```$conn```
-Contains a number of functions:
-```send_data($conn, $key, $val)```
+- Contains the DB connect in ```$conn```
+- Contains a number of functions:
+- ```send_data($conn, $key, $val)``` - Stores in DB
+- ```get_data($conn, $key)``` - Retrieves from DB
 
 
 
