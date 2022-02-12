@@ -103,3 +103,18 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - If called with ```?store=0``` then it will not push the data to the server (Useful for comparing old->new data)
 - When formatted as a page, it generates a series of Bootstrap cards, one for each pot, aligning on default row/col structure
 - You can also add ```?show_deleted``` to show any deleted pots (will affect both json and page modes)
+
+
+**generate_transaction_table.php**
+- This includes a function that generates a table to show any transaction objects which are passed
+- TH includes an in/out column rather than pure amount to display in a more consistent style
+- [ ] To do - Filter table javascript (coming)
+- Merchant and Transaction IDs are shortened and if **Bootstrap** and **popper.js** are included then tooltips display the full amount, and this requires ```transactions.js``` to activate this. Double clicking the table makes it small
+- Errors in storage are reported in a tooltip
+
+**new_transactions.php**
+- This calls the monzo API, getting any new transactions since the last time that it was stored
+- This function can be called with ```?store=0``` to not push the transactions to the server
+- If this function is called with either ```?store=undefined or ?store=1``` then all subsequent runs on this function will return 0 rows as they will have been stored. 
+- If called with ```?format=json``` it will output the information in json for use elsewhere in the application
+- For testing / debuggin purposes, you can send ```?test_run``` and once you have set ```$YOUR_TEST_TRANS_ID``` on line ```4``` then it will send this, suggest picking one around 20 transactions earlier.

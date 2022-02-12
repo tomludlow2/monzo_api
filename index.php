@@ -66,7 +66,7 @@
   <form>
     <img class="mb-4" src="assets/brand/rpi_cloud.svg" alt="" width="72" height="72">
     <h1 class="display-5 mb-3 fw-normal">Monzo API Integration</h1>
-    <p class="lead">Welcome</h1>
+    <p class="lead">Welcome</p>
     <p>Welcome to the Monzo API Integration - designed to allow you to import your monzo history live into other applications & manipulate the data as requried</p>
     <p>To commence, click the button below</p>
     

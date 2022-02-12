@@ -162,7 +162,7 @@
   <form>
     <img class="mb-4" src="assets/brand/rpi_cloud.svg" alt="" width="72" height="72">
     <h1 class="display-5 mb-3 fw-normal">Monzo API Integration</h1>
-    <p class="lead">Access Token Exchange</h1>
+    <p class="lead">Access Token Exchange</p>
     
 	<div class="card text-center">
 		<div class="card-header">Outcome of Exchange</div>
