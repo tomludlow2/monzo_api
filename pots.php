@@ -197,7 +197,7 @@
 <main class="container">
     <img class="mb-4" src="assets/brand/rpi_cloud.svg" alt="" width="72" height="72">
     <h1 class="display-5 mb-3 fw-normal">Monzo API Integration</h1>
-    <p class="lead">Monzo Pots</h1>
+    <p class="lead">Monzo Pots</p>
     	
 
    	<div class="row">
