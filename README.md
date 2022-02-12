@@ -2,7 +2,7 @@
 
 A monzo api integration from the offical [monzo docs](https://docs.monzo.com/#introduction) 
 
-This file give the workflow from user opening the app, through to using the components. 
+This file outlines the workflow from the user opening the app, through to using the components. 
 This is a work in progress, and should only be enabled on a hardened server due to the nature of the content.
 
 ## Overview
