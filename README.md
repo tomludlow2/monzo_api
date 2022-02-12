@@ -124,4 +124,8 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - This function queries the monzo API for any recent transactions, the monzo API limits this to 90 days
 - This defaults to the last 7 days
 - Calling with ```?time_filter=7_d``` would be the equivalent.
-- The expected format is ```number-of-units``` ```_``` ```h|d|w|m``` for hours, days, weeks, months
+- The expected format is ```number-of-units``` ```_``` ```h|d|w|m``` for hours, days, weeks, months]
+- It will throw a readable error in ```filter_error``` if you supply an invalid or too high range (2160h, 90d, 12w, 3m).
+- Note that 3 months is a crude 3 months, if this takes it over 90 days it wont return anything - days is best.  
+- Similarly to ```new_transactions.php``` and other files above, you can pass: ```?format=json|page & store=0|1```
+- This then calls the same ```generate_transaction_table.php``` as before, to generate a table, or returns the json

@@ -24,12 +24,9 @@
 	//Setup request
 	if(isset($_GET['test_run'])) $last_trans_id = $YOUR_TEST_TRANS_ID;
 	$url = "https://api.monzo.com/transactions/?account_id=$account_id&since=$last_trans_id";
-
-
 	$curl = curl_init($url);
 	curl_setopt($curl, CURLOPT_URL, $url);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
 	$headers = array(
    		"Accept: application/json",
    		$authorisation,
@@ -106,6 +103,9 @@
 	}else if($format == "json") {
 		die(json_encode($op));
 	}
+
+	$display_json = 1;
+	$json_pre = "<pre class='text-start'>" . json_encode($op, JSON_PRETTY_PRINT) . "</pre>";
 
 ?>
 
