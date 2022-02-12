@@ -118,3 +118,10 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - If this function is called with either ```?store=undefined or ?store=1``` then all subsequent runs on this function will return 0 rows as they will have been stored. 
 - If called with ```?format=json``` it will output the information in json for use elsewhere in the application
 - For testing / debuggin purposes, you can send ```?test_run``` and once you have set ```$YOUR_TEST_TRANS_ID``` on line ```4``` then it will send this, suggest picking one around 20 transactions earlier.
+
+
+**recent_transactions.php**
+- This function queries the monzo API for any recent transactions, the monzo API limits this to 90 days
+- This defaults to the last 7 days
+- Calling with ```?time_filter=7_d``` would be the equivalent.
+- The expected format is ```number-of-units``` ```_``` ```h|d|w|m``` for hours, days, weeks, months
