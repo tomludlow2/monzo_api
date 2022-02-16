@@ -129,3 +129,11 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - Note that 3 months is a crude 3 months, if this takes it over 90 days it wont return anything - days is best.  
 - Similarly to ```new_transactions.php``` and other files above, you can pass: ```?format=json|page & store=0|1```
 - This then calls the same ```generate_transaction_table.php``` as before, to generate a table, or returns the json
+
+
+**setup_feed_item.php**
+- This file allows the user to create a Feed Item in their feed which will display alongside other transactions
+- It is a bootstrap form that sends data via $.post(AJAX) to ```create_feed_item.php``` which sends back some json response data
+- The feed allows the customisation of message title and message body (both mandatory), as well as image_url (to appear where merchant icons appear) (with a default), as well as a target_url option (can be any url - will be validated before submission), and a background and title colour for the message
+- Submission the updates the raw JSON in the right hand panel
+- The JS for this is in ```feed_items.js```
