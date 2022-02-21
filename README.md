@@ -137,3 +137,13 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - The feed allows the customisation of message title and message body (both mandatory), as well as image_url (to appear where merchant icons appear) (with a default), as well as a target_url option (can be any url - will be validated before submission), and a background and title colour for the message
 - Submission the updates the raw JSON in the right hand panel
 - The JS for this is in ```feed_items.js```
+
+
+**null_receipt.php**
+- As a workaround for the broken Delete Receipt API, this function simply overwrites an existing receipt with:
+```
+Transaction Value = £xx.yy
+Tax = 0
+Payment = Card
+```
+- Simply pass a receipt ID (in full, following whatever nomenclature you use)
