@@ -8,9 +8,8 @@
 	require "conn.php";
 	$access_token = get_data($conn, "access_token");	
 	//Todo - will need to be POST
-	$id = $_GET['id'];
+	$receipt_id = $_POST['receipt_id'];
 
-	$receipt_id = "rpi-monzo-receipt-$id";
 
 	$query = "SELECT * FROM `monzo_receipts` WHERE `receipt_id`='$receipt_id'";
 	$res = mysqli_query($conn, $query);

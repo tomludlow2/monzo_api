@@ -138,6 +138,17 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - Submission the updates the raw JSON in the right hand panel
 - The JS for this is in ```feed_items.js```
 
+**receipt_management.php**
+- This function essentially houses a Bootstrap / jQuery AJAX front-end for the receipt functions. 
+- Manage Receipt includes:
+- **Delete Receipt**
+- - This essentially makes a call to ```null_recipt.php``` to generate a blank receipt
+- - It prompts the user to ensure they know that this won't fully remove the receipt
+- **Validate Receipt**
+- - Ideally there should not be a circumstance where the remote receipt information is incorrect, however given the application stores a copy locally too, it is prudent to have a mechanism to check this
+- Create Receipt includes:
+- - 
+
 
 **null_receipt.php**
 - As a workaround for the broken Delete Receipt API, this function simply overwrites an existing receipt with:
@@ -147,3 +158,10 @@ Tax = 0
 Payment = Card
 ```
 - Simply pass a receipt ID (in full, following whatever nomenclature you use)
+
+
+**get_receipt.php**
+- This file calls the monzo API to collect receipt data from an allocated ```external_id``` number (which you need a copy of).
+- It then simply returns this to the caller
+- Pass this as a POST variable receipt_id
+
