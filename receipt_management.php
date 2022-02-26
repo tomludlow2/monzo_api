@@ -34,7 +34,7 @@
         width: 400px;
       }
      
-      .controls {
+      .controls, #overwrite_holder, #subtotal_incorrect_holder {
         display: none;
       }
 
@@ -63,31 +63,35 @@
                 <option selected>Select a transaction</option>
               </select>
             </div>
+            <div class="mb-3" id="overwrite_holder">
+              <p>There is an existing receipt for that transaction. Click below to overwrite it.</p>
+              <button class="btn btn-warning" id="overwrite_receipt">Overwrite Receipt</button>
+            </div>
             <div class='controls' id='create_controls'>         
               <hr/>
               <p class='card-text'>Use the following form to add items to the above receipt</p>
               <div class="mb-3">
                 <form class="row mb-3 align-items-center">
-                  <div class="col-sm">
-                    <label class="visually-hidden" for="receipt_description">Item Name</label>
-                    <input type="text" class="form-control" id="receipt_description" placeholder="Item Name">
+                  <div class="col-sm ">
+                    <label class="" for="receipt_description">Item Name</label>
+                    <input type="text" class="form-control" id="receipt_description" placeholder="Description">
                   </div>
-                  <div class="col-sm">
-                    <label class="visually-hidden" for="receipt_quantity">Quantity</label>
+                  <div class="col-sm ">
+                    <label class="" for="receipt_quantity">Quantity</label>
                     <input type="number" class="form-control" id="receipt_quantity" placeholder="Quantity" value="1">
                   </div>
                 </form>
-                <form class="row mb-3 align-items-center">
+                <form class="row mb-3 align-items-center ">
                   <div class="col-sm">
-                    <label class="visually-hidden" for="receipt_units">Units</label>
+                    <label class="" for="receipt_units">Units</label>
                     <select class='form-select' id='receipt_units'>
                       <option value=''>Items</option>
                       <option value='kg'>kg</option>
                       <option value='g'>g</option>
                     </select>
                   </div>
-                  <div class="col-sm">
-                    <label class="visually-hidden" for="receipt_amount">Price</label>
+                  <div class="col-sm ">
+                    <label class="" for="receipt_amount">Price per unit</label>
                     <input type="number" class="form-control" id="receipt_amount" placeholder="Price">
                   </div>
                 </form>
@@ -97,6 +101,10 @@
                 <div class="mb-3">
                   <button class="btn btn-info" id='add_item' value='Add Item to Receipt' >Add Item to Receipt</button>
                   
+                </div>
+                <div class="mb-3" id="subtotal_incorrect_holder">
+                  <p>The subtotal does not match the total.</p>
+                  <p><span class="badge bg-warning" id='subtotal_difference'></span></p>
                 </div>
                 <div class="mb-3">
                   <button class="btn btn-primary" id='subtotal_receipt' value='Subtotal Receipt' >Subtotal Receipt</button>
