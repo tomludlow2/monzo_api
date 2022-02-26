@@ -78,7 +78,7 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - Updated styling
 - Redirects to hub once completed
 
-**accounts.php*
+**accounts.php**
 - This function has various functions
 - It simply first calls the monzo API using the information stored in the database
 - If an account is returned, it will generate a specific page
@@ -145,7 +145,7 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - Each receipt has a unique receipt ID, see inside ```add_receipt.php``` to create a custom prefix for your receipts, but it defaults to include the transaction ID, as this must be unique.
 - Receipt management requires the following functions (some of this is a bit clunky as it developed piecemeal)
 - The JS is contained in ```assets/receipts.js```
-**IMPORTANT**
+- **IMPORTANT**
 - Currently the monzo delete receipt API endpoint does not appear to work, despite calling it in the manner advertised on the monzo docs, I cannot get any other endpoint than insufficent permissions. 
 - If anyone is able to help, let me know. 
 
