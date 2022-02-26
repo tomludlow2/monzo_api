@@ -119,7 +119,6 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - If called with ```?format=json``` it will output the information in json for use elsewhere in the application
 - For testing / debuggin purposes, you can send ```?test_run``` and once you have set ```$YOUR_TEST_TRANS_ID``` on line ```4``` then it will send this, suggest picking one around 20 transactions earlier.
 
-
 **recent_transactions.php**
 - This function queries the monzo API for any recent transactions, the monzo API limits this to 90 days
 - This defaults to the last 7 days
@@ -130,6 +129,13 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - Similarly to ```new_transactions.php``` and other files above, you can pass: ```?format=json|page & store=0|1```
 - This then calls the same ```generate_transaction_table.php``` as before, to generate a table, or returns the json
 
+**all_transactions.php**
+- This function queries monzo for the entirity of a user's transactions
+- This can only be done within the first 5 minutes of authorising access to the account
+- You will receive a permissions issue if it is outside this window
+- You can pass ```?format=json|page``` to dictate if it displays the transactions
+- Note that it will automatically store all these transactions in the transactions table. 
+- This then calls the same ```generate_transaction_table.php``` as before, to generate a table, or returns the json
 
 **setup_feed_item.php**
 - This file allows the user to create a Feed Item in their feed which will display alongside other transactions
