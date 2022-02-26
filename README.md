@@ -146,7 +146,7 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - Receipt management requires the following functions (some of this is a bit clunky as it developed piecemeal)
 - The JS is contained in ```assets/receipts.js```
 - **IMPORTANT**
-- Currently the monzo delete receipt API endpoint does not appear to work, despite calling it in the manner advertised on the monzo docs, I cannot get any other endpoint than insufficent permissions. 
+- Currently the monzo (Delete receipt API endpoint)[https://docs.monzo.com/#delete-receipt] does not appear to work, despite calling it in the manner advertised on the monzo docs, I cannot get any other endpoint than insufficent permissions. 
 - If anyone is able to help, let me know. 
 
 
