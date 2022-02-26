@@ -140,16 +140,21 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 
 **receipt_management.php**
 - This function essentially houses a Bootstrap / jQuery AJAX front-end for the receipt functions. 
-- Manage Receipt includes:
-- **Delete Receipt**
-- - This essentially makes a call to ```null_recipt.php``` to generate a blank receipt
+- Monzo accepts a json receipt that can include items, with subitems, as well as tax info, payments, and merchant information
+- Currently this framework allows you to submit items (not subitems yet), and automatically inserts 0 tax with a VAT = 0 receipt in order for monzo to accept it
+- Each receipt has a unique receipt ID, see inside ```add_receipt.php``` to create a custom prefix for your receipts, but it defaults to include the transaction ID, as this must be unique.
+- Receipt management requires the following functions (some of this is a bit clunky as it developed piecemeal)
+- The JS is contained in ```assets/receipts.js```
+**IMPORTANT**
+- Currently the monzo delete receipt API endpoint does not appear to work, despite calling it in the manner advertised on the monzo docs, I cannot get any other endpoint than insufficent permissions. 
+- If anyone is able to help, let me know. 
+
+
+**Delete Receipt**
+- - This essentially makes a call to ```null_receipt.php``` to generate a blank receipt
 - - It prompts the user to ensure they know that this won't fully remove the receipt
-- **Validate Receipt**
+**Validate Receipt**
 - - Ideally there should not be a circumstance where the remote receipt information is incorrect, however given the application stores a copy locally too, it is prudent to have a mechanism to check this
-- Create Receipt includes:
-- - 
-
-
 **null_receipt.php**
 - As a workaround for the broken Delete Receipt API, this function simply overwrites an existing receipt with:
 ```
@@ -159,6 +164,10 @@ Payment = Card
 ```
 - Simply pass a receipt ID (in full, following whatever nomenclature you use)
 
+**populate_receipt_page.php**
+- As receipt management is dynamic, it uses AJAX to populate itself on load rather than CGI pre-load
+- This function produces a JSON encoded readout of the most recent transactions and receipts. 
+- Pass ```$_POST['limit']``` to set the limit for both. 
 
 **get_receipt.php**
 - This file calls the monzo API to collect receipt data from an allocated ```external_id``` number (which you need a copy of).
