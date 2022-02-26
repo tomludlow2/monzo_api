@@ -22,6 +22,8 @@ This is a work in progress, and should only be enabled on a hardened server due 
 ## Specific Files
 I have tried to organise this in the order in which they will run. 
 
+
+## Authentication and Connection
 **conn.php**
 - Contains the DB connect in ```$conn```
 - Contains a number of functions:
@@ -78,6 +80,8 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - Updated styling
 - Redirects to hub once completed
 
+
+### Basic Parameters
 **accounts.php**
 - This function has various functions
 - It simply first calls the monzo API using the information stored in the database
@@ -85,7 +89,6 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - If called with ```?format=json``` then it will output the information in json
 - If called with ```?store=0``` then it will not push the data to the server (Useful for comparing old->new data)
 - The HTML version allows you to display both a tabulated and json version of the data side by side
-
 
 **balance.php**
 - This function has various functions
@@ -105,6 +108,7 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - You can also add ```?show_deleted``` to show any deleted pots (will affect both json and page modes)
 
 
+### Transactions
 **generate_transaction_table.php**
 - This includes a function that generates a table to show any transaction objects which are passed
 - TH includes an in/out column rather than pure amount to display in a more consistent style
@@ -137,6 +141,8 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - Note that it will automatically store all these transactions in the transactions table. 
 - This then calls the same ```generate_transaction_table.php``` as before, to generate a table, or returns the json
 
+
+### Feeds
 **setup_feed_item.php**
 - This file allows the user to create a Feed Item in their feed which will display alongside other transactions
 - It is a bootstrap form that sends data via $.post(AJAX) to ```create_feed_item.php``` which sends back some json response data
@@ -144,6 +150,8 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - Submission the updates the raw JSON in the right hand panel
 - The JS for this is in ```feed_items.js```
 
+
+### Receipts
 **receipt_management.php**
 - This function essentially houses a Bootstrap / jQuery AJAX front-end for the receipt functions. 
 - Monzo accepts a json receipt that can include items, with subitems, as well as tax info, payments, and merchant information
@@ -179,4 +187,23 @@ Payment = Card
 - This file calls the monzo API to collect receipt data from an allocated ```external_id``` number (which you need a copy of).
 - It then simply returns this to the caller
 - Pass this as a POST variable receipt_id
+
+### Webhooks
+**register_webook.php**
+- From [Webooks](https://docs.monzo.com/#webhooks)
+- Send a request GET or POST with ```endpoint=https://yourdomain.tld/your_endpoint``` which will register the endpoint
+- Look for ```status:200``` in the JSON output to validate success
+
+**list_webhooks.php**
+- This file will list the webhooks associated with the account and write them as bootstrap cards.
+- Can be called with ```?format=json``` to output the relevant webhooks in JSON format
+- On the ```?format=page``` you can add a webhook, view the existing webhooks, and delete these too
+
+**delete_webhook.php**
+- This sends a delete request to monzo for the ```?webhook_id=xxx``` parameter
+- It generates a similar screen to ```list_webhooks.php``` if ```?format=page```, or alternatively pass ```?format=json``` to get a json output
+- Look for ```status:200``` in the JSON output to validate success
+
+**webhook_handler.php**
+- This is an example of how you might handle a webhook request
 
