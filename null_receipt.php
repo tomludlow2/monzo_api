@@ -1,19 +1,48 @@
 <?php
 
+	$PAGE_TITLE = "Null Receipt";
+	
 	/*
-	null_receipt.php
-	- Nullifies a previous receipt that has been created by overwriting it with a zero transaction. 
+		=======================================================
+		Monzo API & PHP Integration
+			-GH:		https://github.com/tomludlow2/monzo_api
+			-Monzo:		https://docs.monzo.com/
+
+		Created By:  	Tom Ludlow   tom.m.lud@gmail.com
+		Date:			Feb 2022
+
+		Tools / Frameworks / Acknowledgements 
+			-Bootstrap (inc Icons):	MIT License, (C) 2018 Twitter 
+				(https://getbootstrap.com/docs/5.1/about/license/)
+			-jQuery:		MIT License, (C) 2019 JS Foundation 
+				(https://jquery.org/license/)
+			-Monzo Developer API
+		========================================================
+			file_name:  null_receipt.php
+			function:	overwrite a receipt with null info
+			arguments (default first):	
+				- receipt_id:  The relevant receipt ID to nullify
+
+		IMPORTANT - this function is in lieue of a working
+					delete_receipt.php function
 	*/
 
+	//Connect and setup
 	require "conn.php";
-	$access_token = get_data($conn, "access_token");	
-	//Todo - will need to be POST
-	$receipt_id = $_POST['receipt_id'];
-
+	$access_token = get_data($conn, "access_token");
+	if( isset($_REQUEST['receipt_id'])) {
+		$receipt_id = $_REQUEST['receipt_id'];
+	}else {
+		$op['status'] = 400;
+		$op['error'] = "No receipt ID provided";
+		die(json_encode($op));
+	}
+	
 
 	$query = "SELECT * FROM `monzo_receipts` WHERE `receipt_id`='$receipt_id'";
 	$res = mysqli_query($conn, $query);
 
+	//Do some checks
 	$proceed = true;
 	$transaction_id = "";
 	if( $res ) {
@@ -30,14 +59,15 @@
 			$receipt_id = null;
 			$op['receipt_found'] = false;
 			$proceed = false;
+			$op['status'] = 400; 
 		}
 	}else{
 		$op['error'] = "first_db_error";
+		$op['status'] = 500;
 		$op['mysqli'] = mysqli_error($conn);
 		die(json_encode($op));
 	}
 
-	
 	if( $op['receipt_found'] == true ) {
 		$query2 = "SELECT * FROM `monzo_transactions` WHERE `transaction_id` = '$transaction_id'";
 		$res2 = mysqli_query($conn, $query2);
@@ -50,9 +80,9 @@
 		}else {
 			$op['error'] = "Did not have record of the transaction";
 			$proceed = false;
+			$op['status'] = 500;
 		}
 	}
-	//print_r($op);
 
 	if( $proceed ) {
 		//Generate a very simple receipt to overwrite the old receipt
@@ -90,17 +120,13 @@
 		//Rest of curl parameters
 		$authorisation = "Authorization: Bearer $access_token";
 		$url = "https://api.monzo.com/transaction-receipts";
-
 		//JSON ENCODE IT - important - different to other requests
 		$curl_data = json_encode($payload);
-
 		$curl = curl_init($url);
 		curl_setopt($curl, CURLOPT_URL, $url);
-		//This is a PUT request
 		curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $curl_data);
-
 		$headers = array(
 	   		"Accept: application/json",
 	   		'Content-Type:application/json',
@@ -110,15 +136,10 @@
 
 		//Execute it and get the code
 		$response = curl_exec($curl);
-		$info = curl_getinfo($curl);
+		$op['status'] = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
 		curl_close($curl);
-
-		//info is an assoc array - check the status code.
-		$code = $info['http_code'];
-		if( $code == 200 ) {
-			//Receipt has been added
-			$next_count++;
-			//send_data($conn,"next_receipt_number", $next_count);
+	
+		if( $op['status'] == 200 ) {
 			$op['nullify_receipt'] = nullify_receipt($conn, $receipt_id, json_encode([$item]));
 			$op['success'] = "SUCCESS";
 		}else {
@@ -129,6 +150,7 @@
 
 	}else {
 		$op['proceed'] = false;
+		$op['status'] = 500;
 		die(json_encode($op));
 	}
 

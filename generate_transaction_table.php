@@ -1,4 +1,26 @@
 <?php
+
+	/*
+		=======================================================
+		Monzo API & PHP Integration
+			-GH:		https://github.com/tomludlow2/monzo_api
+			-Monzo:		https://docs.monzo.com/
+
+		Created By:  	Tom Ludlow   tom.m.lud@gmail.com
+		Date:			Feb 2022
+
+		Tools / Frameworks / Acknowledgements 
+			-Bootstrap (inc Icons):	MIT License, (C) 2018 Twitter 
+				(https://getbootstrap.com/docs/5.1/about/license/)
+			-jQuery:		MIT License, (C) 2019 JS Foundation 
+				(https://jquery.org/license/)
+			-Monzo Developer API
+		========================================================
+			file_name:  generate_transaction_table.php
+			function:	Builds the transaction table used in app
+			arguments (default first):	
+				nil
+	*/
 	
 	//Requires conn to create the GENERATE_TABLE_RAW_POTS
 	function transaction_table($transactions) {

@@ -1,5 +1,30 @@
 <?php
 	
+	$PAGE_TITLE = "Access Token Exchange";
+	
+	/*
+		=======================================================
+		Monzo API & PHP Integration
+			-GH:				https://github.com/tomludlow2/monzo_api
+			-Monzo:			https://docs.monzo.com/
+
+		Created By:  	Tom Ludlow   tom.m.lud@gmail.com
+		Date:					Feb 2022
+
+		Tools / Frameworks / Acknowledgements 
+			-Bootstrap (inc Icons):	MIT License, (C) 2018 Twitter 
+				(https://getbootstrap.com/docs/5.1/about/license/)
+			-jQuery:		MIT License, (C) 2019 JS Foundation 
+				(https://jquery.org/license/)
+			-Monzo Developer API
+		========================================================
+			file_name:  get_access_token.php
+			function:		to create an access token from user info
+			arguments:
+					-nil
+			IMPORTANT - legacy style, update in future version
+	*/
+
 	require "conn.php";
 	$authorisation_code = get_data($conn, "temporary_code");
 	$client_id = get_data($conn, "client_id");
@@ -9,6 +34,7 @@
 
 	$url = "https://api.monzo.com/oauth2/token";
 
+	//For some reason I didn't use curl here.
 	$response = httpPost($url,
 		array("grant_type"=>"authorization_code","client_id"=>$client_id, "client_secret"=>$client_secret, "redirect_uri"=>$redirect_uri, "code"=>$authorisation_code)
 	);
@@ -127,15 +153,9 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
-    <title>RPI-Monzo - Token Exchnge</title>
-
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
-
-    
-
-    <!-- Bootstrap core CSS -->
-<link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <title><?php echo TITLE;?></title>
+		<link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="signin.css" rel="stylesheet">
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -150,41 +170,33 @@
           font-size: 3.5rem;
         }
       }
-    </style>
-
-    
-    <!-- Custom styles for this template -->
-    <link href="signin.css" rel="stylesheet">
+    </style>    
   </head>
   <body class="text-center">
     
-<main class="form-signin">
-  <form>
-    <img class="mb-4" src="assets/brand/rpi_cloud.svg" alt="" width="72" height="72">
-    <h1 class="display-5 mb-3 fw-normal">Monzo API Integration</h1>
-    <p class="lead">Access Token Exchange</p>
-    
-	<div class="card text-center">
-		<div class="card-header">Outcome of Exchange</div>
-		<div class="card-body">
-			<h5 class="card-title"><?php echo $title; ?></h5>
-			<p class="card-text"><?php echo $body; ?></p>
-			<a href="<?php echo $url; ?>" class="btn <?php echo $button_class;?>"><?php echo $button_text;?></a>
-		</div>
-		<hr/>
-		<h5 class="card-title" style='<?php if(($a+$b+$c+$d)!=4)echo "display: none;"?>'>Important</h5>
-		<div class="card-body"  style='<?php if(($a+$b+$c+$d)!=4)echo "display: none;"?>'>
-			<p class="card-text">You have been sent a Monzo Notification to allow the app to access info now. Please respond to this</p>
-		</div>
-		<div class="card-footer text-muted">Monzo API Integration</div>
+		<main class="form-signin">
+			<form>
+				<img class="mb-4" src="assets/brand/rpi_cloud.svg" alt="" width="72" height="72">
+				<h1 class="display-5 mb-3 fw-normal"><?php echo TITLE;?></h1>
+				<p class="lead"><?php echo $PAGE_TITLE;?></p>
+		    
+				<div class="card text-center">
+					<div class="card-header">Outcome of Exchange</div>
+					<div class="card-body">
+						<h5 class="card-title"><?php echo $title; ?></h5>
+						<p class="card-text"><?php echo $body; ?></p>
+						<a href="<?php echo $url; ?>" class="btn <?php echo $button_class;?>"><?php echo $button_text;?></a>
+					</div>
+					<hr/>
+					<h5 class="card-title" style='<?php if(($a+$b+$c+$d)!=4)echo "display:none;"?>'>Important</h5>
+					<div class="card-body"  style='<?php if(($a+$b+$c+$d)!=4)echo "display: none;"?>'>
+						<p class="card-text">You have been sent a Monzo Notification to allow the app to access info now. Please respond to this</p>
+					</div>
+					<div class="card-footer text-muted"><?php echo FOOTER;?></div>
 
-	</div>
-    <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
-  </form>
-</main>
-
-
-    
+				</div>
+		    <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+		  </form>
+		</main>    
   </body>
 </html>
-

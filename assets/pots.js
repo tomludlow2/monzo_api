@@ -39,8 +39,8 @@ $(function() {
 
 
 function reset_all() {
-	$(".withdraw_button").removeClass().addClass("btn btn-outline-secondary").attr("disabled", false).html("Withdraw");
-	$(".deposit_button").removeClass().addClass("btn btn-outline-primary").attr("disabled", false).html("Deposit");;
+	$(".withdraw_button").removeClass().addClass("btn withdraw_button btn-outline-secondary").attr("disabled", false).html("Withdraw");
+	$(".deposit_button").removeClass().addClass("btn deposit_button btn-outline-primary").attr("disabled", false).html("Deposit");;
 	$(".amount_input").val("").parent().hide();
 }
 

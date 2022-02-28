@@ -1,22 +1,48 @@
 <?php
+	
+	$PAGE_TITLE = "Delete Receipt";
+	/*
+		=======================================================
+		Monzo API & PHP Integration
+			-GH:		https://github.com/tomludlow2/monzo_api
+			-Monzo:		https://docs.monzo.com/
+
+		Created By:  	Tom Ludlow   tom.m.lud@gmail.com
+		Date:			Feb 2022
+
+		Tools / Frameworks / Acknowledgements 
+			-Bootstrap (inc Icons):	MIT License, (C) 2018 Twitter 
+				(https://getbootstrap.com/docs/5.1/about/license/)
+			-jQuery:		MIT License, (C) 2019 JS Foundation 
+				(https://jquery.org/license/)
+			-Monzo Developer API
+		========================================================
+			file_name:  delete_receipt.php
+			function:	attempt to delete a receipt from monzo
+			arguments (default first):	
+				-receipt_id:	The receipt ID to delete
+
+		IMPORTANT: This does not work currently
+		- Despite sending the request successfully the outcome
+			is always that there are insufficient permissions,
+		- If anyone knows why, let me know!
+	*/
 
 	//This function will get receipt data transactions
 	require "conn.php";
 	$access_token = get_data($conn, "access_token");
 	$op = [];
-	/*
-	if( isset($_POST['receipt_id']) ) {
-		$receipt_id = $_POST['receipt_id'];
-		$op['receipt_id'] = $receipt_id;
-		//Could here check back in DB etc but not going to now. 
+	
+	if( isset($_REQUEST['receipt_id']) ) {
+		$receipt_id = $_REQUEST['receipt_id'];
+		$op['receipt_id'] = $receipt_id; 
 	}else {
 		$op['error'] = "No receipt_id provided";
+		$op['status'] = 400;
 		die(json_encode($op));
-	}
-	*/
-	$num = $_GET['num'];
-	$receipt_id = "rpi-monzo-receipt-28";
+	}	
 
+	//Setup CURL
 	$authorisation = "Authorization: Bearer $access_token";
 	$url = "https://api.monzo.com/transaction-receipts/?external_id=$receipt_id";
 	$curl_data = Array(
@@ -36,13 +62,10 @@
 	curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
 	$response = curl_exec($curl);
-	$info = curl_getinfo($curl);
+	$op['status'] = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
 	curl_close($curl);
-
-	//info is an assoc array - check the status code.
-	$code = $info['http_code'];
 	
-	if( $code == 200 ) {
+	if( $op['status'] == 200 ) {
 		//Receipt has been deleted
 		$op['register_delete_receipt'] = delete_receipt($conn, $receipt_id);
 		$op['success'] = "SUCCESS";

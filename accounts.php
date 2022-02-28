@@ -1,55 +1,88 @@
 <?php
 
+	$PAGE_TITLE = "Monzo Accounts";
+	
+	/*
+		=======================================================
+		Monzo API & PHP Integration
+			-GH:				https://github.com/tomludlow2/monzo_api
+			-Monzo:			https://docs.monzo.com/
+
+		Created By:  	Tom Ludlow   tom.m.lud@gmail.com
+		Date:					Feb 2022
+
+		Tools / Frameworks / Acknowledgements 
+			-Bootstrap (inc Icons):	MIT License, (C) 2018 Twitter 
+				(https://getbootstrap.com/docs/5.1/about/license/)
+			-jQuery:		MIT License, (C) 2019 JS Foundation 
+				(https://jquery.org/license/)
+			-Monzo Developer API
+		========================================================
+			file_name:  accounts.php
+			function:		readout, and store account data
+			arguments (default first):	
+				-	format:					"json" or "page"
+				- store:					"1" or "0"
+				- hide_json: 			undefined or true
+	*/
+
 	//Connect and send the request
 	require "conn.php";
 	$access_token = get_data($conn, "access_token");
 	$authorisation = "Authorization: Bearer $access_token";
 	$url = "https://api.monzo.com/accounts";
 
+	//Generate the output for the json
+	$op = [];
+
+	//Curl INIT and content
 	$curl = curl_init($url);
 	curl_setopt($curl, CURLOPT_URL, $url);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
 	$headers = array(
    		"Accept: application/json",
    		$authorisation,
 	);
 	curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-
 	$response = curl_exec($curl);
+	$op['status'] = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
 	$accounts_holder = json_decode($response, true);
 	curl_close($curl);
 
 
 
-	//Now check what to do:
-	$format = "page";
-	//Generate the output for the json
-	$op = [];
-
-	if( isset($_GET['format']) ) {
-		if( $_GET['format'] == "json" ) {
+	//Modulate outcome (json vs page):
+	$format = "page";	
+	if( isset($_REQUEST['format']) ) {
+		if( $_REQUEST['format'] == "json" ) {
 			$format = "json";
 			$op['format'] = "json";
 		}
 	}
 
+	//Modulate display of json (for page setting)
+	$display_json = 1;
+	if( isset($_REQUEST['hide_json']) ) {
+		$display_json = 0;
+	}
+
+	//Modulate storage (or not):
 	$store = 1;
-	if( isset($_GET['store']) ) {
-		if( $_GET['store'] == "0" ) {
+	if( isset($_REQUEST['store']) ) {
+		if( $_REQUEST['store'] == "0" ) {
 			$store = 0;
 			$op['stored'] = false;
 		}else {
 			$op['stored'] = true;
 		}
-	}
-	
+	}	
 
 	//Load in the accounts information
 	$accounts = $accounts_holder['accounts'];
 	$op['num_accounts'] = count($accounts);
 	if( $op['num_accounts'] >= 1 ) {
-		//Currently only works for a sinle account
+		//Currently only works for a single account
+		//TODO: Expand for joint accounts
 		$account = $accounts[0];
 		$op['success'] = 1;
 		#Get the important bits:
@@ -61,8 +94,7 @@
 		$ib['first_name'] = $account['owners'][0]['preferred_first_name'];
 
 		//Try to sort time
-		$ib['account_created_human'] = date("F j, Y, g:i a", strtotime($account['created']) );
-
+		$ib['account_created_human'] = date("F j, Y, g:i a", strtotime($account['created']));
 		foreach ($ib as $key => $value) {
 			if($store) send_data($conn, $key, $value);
 			$op[$key] = $value;
@@ -84,13 +116,10 @@
 		}else {			
 			$title = "Monzo Account Information";
 			$body = gen_table($op);
-			$json_pre = "<pre class='text-start'>" . json_encode($op, JSON_PRETTY_PRINT) . "</pre>";
+			$json_pre = "<pre class='text-start' id='response_output'>" . json_encode($op, JSON_PRETTY_PRINT) . "</pre>";
 			$button_text = "Return to Hub";
 			$button_class = "btn-primary";
-			$url = "hub.php";
-			if( 1==1 /*Check if user displaying JSON*/) {
-				$display_json = 1;
-			}
+			$url = "hub.php";			
 		}
 	}
 	
@@ -124,7 +153,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
-    <title>RPI-Monzo - Accounts</title>
+    <title><?php echo TITLE;?></title>
 
     <!-- Bootstrap core CSS -->
 <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -157,8 +186,8 @@
     
 <main class="container">
     <img class="mb-4" src="assets/brand/rpi_cloud.svg" alt="" width="72" height="72">
-    <h1 class="display-5 mb-3 fw-normal">Monzo API Integration</h1>
-    <p class="lead">Monzo Accounts</p>
+    <h1 class="display-5 mb-3 fw-normal"><?php echo TITLE;?></h1>
+    <p class="lead"><?php echo $PAGE_TITLE; ?></p>
     	
 
    	<div class="row">
@@ -174,11 +203,11 @@
 			</div>
 		</div>
 
-		<div class="col mb-3" style='<?php if(!$display_json) echo "display: none;"?>'>
+		<div class="col mb-3">
 			<div class="card text-center" >
 				<div class="card-header">JSON Output</div>
 				<div class="card-body">
-					<p class="card-text"><?php echo $json_pre; ?></p>
+					<p class="card-text"><?php if($display_json) echo $json_pre; ?></p>
 				</div>		
 				<div class="card-footer text-muted">Monzo API Integration</div>
 			</div>
