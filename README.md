@@ -98,6 +98,8 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - If called with ```?store=0``` then it will not push the data to the server (Useful for comparing old->new data)
 - The HTML version allows you to display both a tabulated and json version of the data side by side
 
+
+### Pots - View, Deposit and Withdraw
 **pots.php**
 - This function has various functions
 - It simply first calls the monzo API using the information stored in the database
@@ -106,7 +108,18 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - If called with ```?store=0``` then it will not push the data to the server (Useful for comparing old->new data)
 - When formatted as a page, it generates a series of Bootstrap cards, one for each pot, aligning on default row/col structure
 - You can also add ```?show_deleted``` to show any deleted pots (will affect both json and page modes)
+- This function also gives options to move money, either to withdraw or deposit, using the following
+- (JS is with ```assets/pots.js```);
 
+**deposit_pots.php**
+- Accepts ```?pot_id=xxx  &   amount=100``` amount in pence 
+- Generates an output, look for ```status=200``` for it going through with ```new_balance```
+- Throws some generic errors where possible
+
+**withdraw_pots.php**
+- Accepts ```?pot_id=xxx  &   amount=100``` amount in pence 
+- Generates an output, look for ```status=200``` for it going through with ```new_balance```
+- Throws some generic errors where possible
 
 ### Transactions
 **generate_transaction_table.php**

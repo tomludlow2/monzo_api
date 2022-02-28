@@ -141,17 +141,23 @@
 		}else if($pot['pot_type'] == "deleted") {
 			$r .= "<tr><td>Pot Type</td><td>Deleted Pot</td></tr>";
 		}
-		$r .= "<tr><td>Current Bal</td><td>&pound;" . number_format(($pot['pot_balance']/100),2) . "</td></tr>";
+		$r .= "<tr><td>Current Bal</td><td><span pot_id='" . $pot['pot_id'] . "'>&pound;" . number_format(($pot['pot_balance']/100),2) . "</span></td></tr>";
 		if( $pot['sent_to_server'] == "Sent successfully") {
 			$r .= "<tr><td>Sent to Server?</td><td><span class='badge bg-success'>Sent</span></td></tr>";
 		}else {
 			$r .= "<tr><td>Sent to Server?</td><td><span class='badge bg-danger'>" . $pot['sent_to_server'] . "</span></td></tr>";
 		}
+		if( $pot['pot_type'] != "deleted") {
+			$r .= "<tr class='text-center'><td><button class='btn btn-outline-primary deposit_button' pot_id='" . $pot['pot_id'] . "' value='Deposit Funds'>Deposit</button></td>";
+			$r .= "<td><button class='btn btn-outline-secondary withdraw_button' pot_id='" . $pot['pot_id'] . "' value='Withdraw Funds'>Withdraw</button></td></tr>";
+			$r .= "<tr><td colspan='2' class='input_row'><input type='text' class='form-control amount_input' pot_id='" . $pot['pot_id'] . "' placeholder='Amount to Transfer (£)'></td></tr>";
+		}
+
 		$r .= "</table>";
 		return $r;
 	}
 
-	$json_pre = "<pre class='text-start'>" . json_encode($op, JSON_PRETTY_PRINT) . "</pre>";
+	$json_pre = "<pre class='text-start' id='response_output'>" . json_encode($op, JSON_PRETTY_PRINT) . "</pre>";
 ?>
 
 
@@ -185,6 +191,10 @@
 
       body {
       	display: block !important;
+      }
+
+      .input_row {
+      	display: none;
       }
     </style>
 
@@ -224,4 +234,6 @@
 
     
   </body>
+  <script src='assets/jquery.js'></script>
+  <script  src='assets/pots.js'></script>
 </html>
