@@ -16,12 +16,16 @@ This is a work in progress, and should only be enabled on a hardened server due 
 ## Setup
 - You will need a Monzo Account (obviously
 - You will need a database (I am using a MySQL database)
-- [ ] I will try and copy a blank example SQL insert **later**
+- See **assets/monzo_api_db_structure.sql** to setup your database
+- Once you have setup the database, import **monzo_auth_sample.php** to see the necessary key/val pairs
+- Any that are formatted as ```  *insert..* ``` need to be manually adjusted from the monzo developer portal with your relevant auth codes
+- Once you have done this move this table to overwrite ``` monzo_auth ``` 
+- You then need to open ```credentials.sample.php``` and update the relevant bits there
+- Then copy this file to ```credentials.php``` and you should be good to go!
 
 
 ## Specific Files
 I have tried to organise this in the order in which they will run. 
-
 
 ## Authentication and Connection
 **conn.php**
