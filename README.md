@@ -14,7 +14,7 @@ This is a work in progress, and should only be enabled on a hardened server due 
 - Instead the user will be pinged from the Monzo App and will have to put in their PIN to get your system access
 
 ## Setup
-- You will need a Monzo Account (obviously
+- You will need a Monzo Account (obviously)
 - You will need a database (I am using a MySQL database)
 - See **assets/monzo_api_db_structure.sql** to setup your database
 - Once you have setup the database, import **monzo_auth_sample.php** to see the necessary key/val pairs
