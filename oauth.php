@@ -69,6 +69,7 @@
 			$url = "index.php"; 
 			$button_class="btn-danger"; 
 			$button_text = "Quit";
+			destroy_session();
 		}
 	}else {
 		$op['status'] = 400;

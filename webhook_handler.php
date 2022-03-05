@@ -23,7 +23,8 @@
 			arguments (default first):	
 				- data - 	for simulating requests
 	*/
-
+	//This function needs to be exempt from session validation as monzo will not produce session data. 
+    $SESSION_EXEMPT=1;
 	require "conn.php";
 
 	/*

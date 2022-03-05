@@ -224,3 +224,11 @@ Payment = Card
 **webhook_handler.php**
 - This is an example of how you might handle a webhook request
 
+### Sessions
+**session_management.php**
+- This function validates and sets session info. 
+- Any page where ```conn.php``` is included will call this function.
+- Note that this means all authentication procedures must be done on the same device
+
+**local_login.php**
+- Facilitates a local login procedure

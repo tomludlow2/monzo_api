@@ -22,7 +22,7 @@
 
 	//Import credentials (from credentials.example.php)
 	require("credentials.php");
-
+	require("session_management.php");
 
 	//Define system constants
 	define("TITLE", "RPi Monzo Integration");
