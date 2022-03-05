@@ -3,5 +3,5 @@ debug/
 credentials.php
 test.php
 hub.php
-dashboard.css
-dashboard.js
+assets/hub.css
+assets/hub.js
