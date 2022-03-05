@@ -1,19 +1,37 @@
+/*
+	=======================================================
+	Monzo API & PHP Integration
+		-GH:		https://github.com/tomludlow2/monzo_api
+		-Monzo:		https://docs.monzo.com/
+
+	Created By:  	Tom Ludlow   tom.m.lud@gmail.com
+	Date:			Feb 2022
+
+	Tools / Frameworks / Acknowledgements 
+		-Bootstrap (inc Icons):	MIT License, (C) 2018 Twitter 
+			(https://getbootstrap.com/docs/5.1/about/license/)
+		-jQuery:		MIT License, (C) 2019 JS Foundation 
+			(https://jquery.org/license/)
+		-Monzo Developer API
+	========================================================
+		file_name:  receipts.js
+		function:	provide the local JS to manage all the 
+					receipts functions. jQuery
+*/
+
 var transactions = [];
 var receipts = [];
 var delete_conf = false;
-
 var create_receipt = {};
 
 $(function() {
 	load_data();
-
 	$('#receipt_select').on("change", function(event) {
 		$('#response_output').html("");
 		$('#create_receipt_holder').hide();
 		$('#manage_controls').show();
 		let receipt = receipts[$(this).val()];
 		$('#items_readout').text( write_receipt(receipt)).removeClass("bg-success").removeClass("bg-warning");
-
 	});
 
 	$('#receipt_delete').on("click", function(event) {
@@ -81,7 +99,6 @@ $(function() {
 				remote_amount: remote_data.total,
 				local_items: local_items,
 				remote_items: remote_data.items
-				
 			};
 
 			if( (validate.check_matched_items + validate.check_item_count + validate.check_amounts) == 3) {
@@ -90,7 +107,6 @@ $(function() {
 				$('#items_readout').addClass("bg-warning");
 				alert("There is a validation problem between the Monzo and Local Servers");
 			}
-
 			$('#response_output').html("<pre class='text-start'>" + JSON.stringify(output_comp, null, 2) + "</pre>");
 		}, "json");
 	});
@@ -109,7 +125,7 @@ $(function() {
 		//Check if exists already
 		$.post("check_receipt.php", {transaction_id:transaction_id}, function(data) {
 			if( data.receipt_found == true ) {
-				console.log(data);
+				//console.log(data);
 				$('#response_output').html("<pre class='text-start'>" + JSON.stringify(data, null, 2) + "</pre>");
 				$('#overwrite_holder').show();
 				$('#items_readout').text( write_receipt(data)).removeClass("bg-success").removeClass("bg-warning");
@@ -177,7 +193,6 @@ $(function() {
 	
   	$('#create_receipt').click(function(event) {
 		let data = {new_receipt:create_receipt};
-
 		$.post( "add_receipt.php", data, function(data) {
 			console.log(data);
 			let op = JSON.stringify(data, null, 2);
@@ -189,7 +204,7 @@ $(function() {
 
 function load_data() {
 	$.post("populate_receipt_page.php", {limit:25}, function(data) {
-		console.log(data);
+		//console.log(data);
 		transactions = [];
 		receipts = [];
 		create_receipt = {};
@@ -200,14 +215,11 @@ function load_data() {
 			for (var i = 0; i <= data.receipt_data.transactions.length -1; i++) {
 				receipts[data.receipt_data.transactions[i]['receipt_id']] = data.receipt_data.transactions[i];
 			}
-
 			//Populate the selects
 			let trans_select = produce_select(data.transactions_data.transactions, "trans");
 			let receipts_select = produce_select(data.receipt_data.transactions, "receipts");
-
 			$('#transaction_select').html( trans_select);
 			$('#receipt_select').html( receipts_select);
-
 		}
 	}, "json");
 }
@@ -232,6 +244,7 @@ function produce_select(rows, mode) {
 }
 
 function write_receipt(receipt) {
+	//A bit clunky - TODO - look for receipt formatter
 	let r = "MONZO API RECEIPT\n";	
 	r += "---Receipt for " + receipt.trans_id + "---\n";
 	r += "---Local Ref " + receipt.receipt_id + "---\n";

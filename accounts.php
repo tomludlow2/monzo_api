@@ -154,9 +154,8 @@
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
     <title><?php echo TITLE;?></title>
-
-    <!-- Bootstrap core CSS -->
-<link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="signin.css" rel="stylesheet">
 
     <style>
       .bd-placeholder-img {
@@ -166,60 +165,48 @@
         -moz-user-select: none;
         user-select: none;
       }
-
       @media (min-width: 768px) {
         .bd-placeholder-img-lg {
           font-size: 3.5rem;
         }
       }
-
       body {
       	display: block !important;
       }
     </style>
 
-    
-    <!-- Custom styles for this template -->
-    <link href="signin.css" rel="stylesheet">
   </head>
-  <body class="text-center">
-    
-<main class="container">
-    <img class="mb-4" src="assets/brand/rpi_cloud.svg" alt="" width="72" height="72">
-    <h1 class="display-5 mb-3 fw-normal"><?php echo TITLE;?></h1>
-    <p class="lead"><?php echo $PAGE_TITLE; ?></p>
-    	
+  <body class="text-center">    
+		<main class="container">
+	    <img class="mb-4" src="assets/brand/rpi_cloud.svg" alt="" width="72" height="72">
+	    <h1 class="display-5 mb-3 fw-normal"><?php echo TITLE;?></h1>
+	    <p class="lead"><?php echo $PAGE_TITLE; ?></p>    	
 
-   	<div class="row">
-   		<div class="col mb-3">
-			<div class="card text-center">
-				<div class="card-header">Account Information</div>
-				<div class="card-body">
-					<h5 class="card-title"><?php echo $title; ?></h5>
-					<p class="card-text"><?php echo $body; ?></p>
-					<a href="<?php echo $url; ?>" class="btn <?php echo $button_class;?>"><?php echo $button_text;?></a>
-				</div>		
-				<div class="card-footer text-muted">Monzo API Integration</div>
+	   	<div class="row">
+	   		<div class="col mb-3">
+					<div class="card text-center">
+						<div class="card-header">Account Information</div>
+						<div class="card-body">
+							<h5 class="card-title"><?php echo $title; ?></h5>
+							<p class="card-text"><?php echo $body; ?></p>
+							<a href="<?php echo $url; ?>" class="btn <?php echo $button_class;?>"><?php echo $button_text;?></a>
+						</div>		
+						<div class="card-footer text-muted"><?php echo FOOTER;?></div>
+					</div>
+				</div>
+
+				<div class="col mb-3">
+					<div class="card text-center" >
+						<div class="card-header">JSON Output</div>
+						<div class="card-body">
+							<p class="card-text"><?php if($display_json) echo $json_pre; ?></p>
+						</div>		
+						<div class="card-footer text-muted"><?php echo FOOTER;?></div>
+					</div>
+				</div>
+
 			</div>
-		</div>
-
-		<div class="col mb-3">
-			<div class="card text-center" >
-				<div class="card-header">JSON Output</div>
-				<div class="card-body">
-					<p class="card-text"><?php if($display_json) echo $json_pre; ?></p>
-				</div>		
-				<div class="card-footer text-muted">Monzo API Integration</div>
-			</div>
-		</div>
-
-	</div>
-
-
-    <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
-</main>
-
-
-    
+	   <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+		</main>
   </body>
 </html>

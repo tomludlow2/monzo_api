@@ -1,5 +1,7 @@
 backup/
 debug/
 credentials.php
-working.php
 test.php
+hub.php
+dashboard.css
+dashboard.js

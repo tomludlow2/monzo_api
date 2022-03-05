@@ -1,3 +1,25 @@
+/*
+	=======================================================
+	Monzo API & PHP Integration
+		-GH:		https://github.com/tomludlow2/monzo_api
+		-Monzo:		https://docs.monzo.com/
+
+	Created By:  	Tom Ludlow   tom.m.lud@gmail.com
+	Date:			Feb 2022
+
+	Tools / Frameworks / Acknowledgements 
+		-Bootstrap (inc Icons):	MIT License, (C) 2018 Twitter 
+			(https://getbootstrap.com/docs/5.1/about/license/)
+		-jQuery:		MIT License, (C) 2019 JS Foundation 
+			(https://jquery.org/license/)
+		-Monzo Developer API
+	========================================================
+		file_name:  webhook.js
+		function:	provide the local JS to add, remove and
+					test webhooks
+*/
+
+//This is the example transaction from the monzo docs
 const TEST_TRANSACTION = {
     "type": "transaction.created",
     "data": {
@@ -32,11 +54,9 @@ const TEST_TRANSACTION = {
 }
 
 $(function() {
-
 	$('#webhook_endpoint').on("change", function(event) {
 		//Check validation
 		let val = $(this).val();
-
 		if( check_url(val) ) {
 			let url = new URL(val);
 			if( url.protocol == "https:") {
@@ -47,9 +67,8 @@ $(function() {
 		}else {
 			$('#register_webhook_btn').addClass("btn-warning").removeClass("btn-success").html("Invalid Endpoint");
 		}
-		console.log(check_url(val));
-		console.log(new URL(val));
-
+		//console.log(check_url(val));
+		//console.log(new URL(val));
 	});
 
 	$('#register_webhook_btn').click(function(event) {
@@ -57,7 +76,6 @@ $(function() {
 		let val = $('#webhook_endpoint').val();
 		let url = new URL(val);
 		let endpoint = url.origin;
-
 		$.post("register_webhook.php", {endpoint:endpoint}, function(data) {
 			if( data.status == 200) {
 				$('#response_output').html("<pre class='text-start'>" + JSON.stringify(data, null,2) + "</pre>").addClass("bg-success");
@@ -72,24 +90,14 @@ $(function() {
 		event.preventDefault();
 		let id = $(this).prop("id");
 		let href = $(this).prop("href");
-		console.log(id, href);
-
 		let conf = confirm("Confirm you would like to send a test transaction to your webhook endpoint");
-
 		let send_data = new Object();
 		send_data.name = "test";
 		send_data.format = "json";
-		if( conf ) {
-			console.log(TEST_TRANSACTION);
-			//console.log(TEST_TRANSACTION.serialize());
-			//console.log(JSON.stringify(send_data));
-			console.log(href);
-			$.post(href,{data: TEST_TRANSACTION}, function(data){
-				console.log(data);				
+		if( conf ) {			
+			$.post(href,{data: TEST_TRANSACTION}, function(data){			
 				$('#response_output').html("<pre class='text-start'>" + JSON.stringify(data, null,2) + "</pre>").addClass("bg-success");
 			}, "json");
-		}else {
-
 		}
 	});
 
@@ -100,7 +108,6 @@ $(function() {
 		let conf = confirm("Confirm you would like to delete this webhook");
 		if( conf ) {
 			$.post("delete_webhook.php", {webhook_id:id,format:"json"}, function(data) {
-				console.log(data);
 				if( data.delete_outcome == 200 ) {
 					//It has been deleted
 					let w_id = data.webhook_id;
@@ -108,25 +115,19 @@ $(function() {
 					$('#response_output').html("<pre class='text-start'>" + JSON.stringify(data, null,2) + "</pre>").addClass("bg-success");
 				}else {
 					$('#response_output').html("<pre class='text-start'>" + JSON.stringify(data, null,2) + "</pre>").addClass("bg-danger");
-				}
-				
-
+				}			
 			}, "json");
-		}else {
-
 		}
 	});
 	
 });
 
 function check_url(string) {
-  let url;
-  
+  let url;  
   try {
     url = new URL(string);
   } catch (_) {
     return false;  
   }
-
   return url.protocol === "http:" || url.protocol === "https:";
 }

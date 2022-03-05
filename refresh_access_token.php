@@ -1,4 +1,28 @@
 <?php
+	$PAGE_TITLE = "Refresh Access Token";
+	
+	/*
+		=======================================================
+		Monzo API & PHP Integration
+			-GH:				https://github.com/tomludlow2/monzo_api
+			-Monzo:			https://docs.monzo.com/
+
+		Created By:  	Tom Ludlow   tom.m.lud@gmail.com
+		Date:					Feb 2022
+
+		Tools / Frameworks / Acknowledgements 
+			-Bootstrap (inc Icons):	MIT License, (C) 2018 Twitter 
+				(https://getbootstrap.com/docs/5.1/about/license/)
+			-jQuery:		MIT License, (C) 2019 JS Foundation 
+				(https://jquery.org/license/)
+			-Monzo Developer API
+		========================================================
+			file_name:  refresh_access_token.php
+			function:		refresh the access token by exchange
+			arguments (default first):	
+				-	format:					"json" or "page"
+				- hide_json: 			undefined or true
+	*/
 
 	require "conn.php";
 	$client_id = get_data($conn, "client_id");
@@ -6,26 +30,35 @@
 	$redirect_uri = get_data($conn, "redirect_uri");
 	$grant_type = "refresh_token";
 	$refresh_token = get_data($conn, "refresh_token");
-
+	$op = [];
 	$url = "https://api.monzo.com/oauth2/token";
-
 	$response = httpPost($url,
 		array("grant_type"=>$grant_type,"client_id"=>$client_id, "client_secret"=>$client_secret, "redirect_uri"=>$redirect_uri, "refresh_token"=>$refresh_token)
 	);
-
-
 	$resp = json_decode($response, true);
 
-	$op = [];
+	//Modulate outcome (json vs page):
+	$format = "page";	
+	if( isset($_REQUEST['format']) ) {
+		if( $_REQUEST['format'] == "json" ) {
+			$format = "json";
+			$op['format'] = "json";
+		}
+	}
+
+	//Modulate display of json (for page setting)
+	$display_json = 1;
+	if( isset($_REQUEST['hide_json']) ) {
+		$display_json = 0;
+	}
+
 	$a = $b = $c = $d = 0;
-
-
 	if( isset($resp['access_token'])) {
 		send_data($conn, "access_token", $resp['access_token']);
-		array_push($op, "Success 1 - Access token found");
+		$op['access_token_found'] = "Success 1 - Access token found";
 		$a = 1;
 	}else {
-		array_push($op, "Error 1 - Access token NOT found");
+		$op['access_token_found'] = "Error 1 - Access token not found";
 	}
 
 	if( isset($resp['expires_in'])) {
@@ -35,52 +68,54 @@
 		send_data($conn, "expires_at", $expires_at);
 		send_data($conn, "expires_at_human", $expires_at_human);
 		$b = 1;
-		array_push($op, "Success 2 - Expiry Time found");
+		$op['expiry_time'] = $expires_at;
+		$op['expiry_time_human'] = $expires_at_human;
 	}else {
-		array_push($op, "Error 2 - Expiry Token NOT found");
+		$op['expiry_time'] = "Error 2 - Expiry Token NOT found";
+		$op['expiry_time_human'] = "Error 2 - Expiry Token NOT found";
 	}
 
 	if( isset($resp['refresh_token'])) {
 		send_data($conn, "refresh_token", $resp['refresh_token']);
 		$c = 1;
-		array_push($op, "Success 3 - Refresh token found");
+		$op['refresh_token_found'] = "Success 3 - Refresh token found";
 	}else {
-		array_push($op, "Error 3 - Refresh token NOT found");
+		$op['refresh_token_found'] = "Error 3 - Refresh token not found";
 	}
 
 	if( isset($resp['scope'])) {
 		send_data($conn, "scope", $resp['scope']);
 		$d = 1;
-		array_push($op, "Success 4 - Scope found");
+		$op['scope_found'] = "Success 4 - Scope Found";
 	}else {
-		array_push($op, "Error 4 - Scope NOT found");
+		$op['scope_found'] = "Error 4 - Scope Not Found";	
 	}
 
 
 	function generate_table($a,$b,$c,$d) {
-		$table = "<ul class=\"list-group list-group-flush text-start\">";
+		$table = "<ul class=\"list-group list-group-flush text-center\">";
 		if( $a ) {
-			$table .= "<li class=\"list-group-item\">Access Token <span class=\"badge bg-success\">Success</span></li>";
+			$table .= "<li class=\"list-group-item\"><div class='row'><div class='col'>Access Token</div><div class='col'><span class=\"badge bg-success\">Success</span></div></div></li>";
 		}else {
-			$table .= "<li class=\"list-group-item\">Access Token <span class=\"badge bg-danger\">Error</span></li>";
+			$table .= "<li class=\"list-group-item\"><div class='row'><div class='col'>Access Token</div><div class='col'><span class=\"badge bg-danger\">Error</span></div></div></li>";
 		}
 
 		if( $b ) {
-			$table .= "<li class=\"list-group-item\">Expiry Time <span class=\"badge bg-success\">Success</span></li>";
+			$table .= "<li class=\"list-group-item\"><div class='row'><div class='col'>Expiry Time</div><div class='col'><span class=\"badge bg-success\">Success</span></div></div></li>";
 		}else {
-			$table .= "<li class=\"list-group-item\">Expiry Time <span class=\"badge bg-danger\">Error</span></li>";
+			$table .= "<li class=\"list-group-item\"><div class='row'><div class='col'>Expiry Time</div><div class='col'><span class=\"badge bg-danger\">Error</span></div></div></li>";
 		}
 
 		if( $c ) {
-			$table .= "<li class=\"list-group-item\">Refresh Token <span class=\"badge bg-success\">Success</span></li>";
+			$table .= "<li class=\"list-group-item\"><div class='row'><div class='col'>Refresh Token</div><div class='col'><span class=\"badge bg-success\">Success</span></div></div></li>";
 		}else {
-			$table .= "<li class=\"list-group-item\">Refresh Token <span class=\"badge bg-danger\">Error</span></li>";
+			$table .= "<li class=\"list-group-item\"><div class='row'><div class='col'>Refresh Token</div><div class='col'><span class=\"badge bg-danger\">Error</span></div></div></li>";
 		}
 
 		if( $d ) {
-			$table .= "<li class=\"list-group-item\">Scope <span class=\"badge bg-success\">Success</span></li>";
+			$table .= "<li class=\"list-group-item\"><div class='row'><div class='col'>Scope</div><div class='col'><span class=\"badge bg-success\">Success</span></div></div></li>";
 		}else {
-			$table .= "<li class=\"list-group-item\">Scope <span class=\"badge bg-danger\">Error</span></li>";
+			$table .= "<li class=\"list-group-item\"><div class='row'><div class='col'>Scope</div><div class='col'><span class=\"badge bg-danger\">Error</span></div></div></li>";
 		}
 
 		$table .= "</ul>";
@@ -95,7 +130,8 @@
 		$url = "hub.php";
 		$button_text = "Operations Hub";
 		$button_class = "btn-primary";
-
+		$op['status'] = 200;
+		$op['success'] = 1;
 	}else {
 		//An error!
 		$title = "Token Refresh Failure";
@@ -104,6 +140,8 @@
 		$url = "index.php";
 		$button_text = "Restart";
 		$button_class = "btn-warning";
+		$op['status'] = 500;
+		$op['success'] = 0;
 	}
 
 	function httpPost($url, $data){
@@ -116,6 +154,12 @@
 	    return $response;
 	}
 
+	if( $format == "json") {
+		die(json_encode($op));
+	}
+
+	$json_pre = "<pre class='text-start' id='response_output'>" . json_encode($op, JSON_PRETTY_PRINT) . "</pre>";
+
 ?>
 
 
@@ -127,15 +171,9 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
-    <title>RPI-Monzo - Refresh Token?</title>
-
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
-
-    
-
-    <!-- Bootstrap core CSS -->
-<link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <title><?php echo TITLE;?></title>
+		<link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="signin.css" rel="stylesheet">
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -144,40 +182,42 @@
         -moz-user-select: none;
         user-select: none;
       }
-
       @media (min-width: 768px) {
         .bd-placeholder-img-lg {
           font-size: 3.5rem;
         }
       }
-    </style>
-
-    
-    <!-- Custom styles for this template -->
-    <link href="signin.css" rel="stylesheet">
+    </style>    
   </head>
-  <body class="text-center">
-    
-<main class="form-signin">
-  <form>
-    <img class="mb-4" src="assets/brand/rpi_cloud.svg" alt="" width="72" height="72">
-    <h1 class="display-5 mb-3 fw-normal">Monzo API Integration</h1>
-    <p class="lead">Refresh Access Token</p>
-    
-	<div class="card text-center">
-		<div class="card-header">Outcome of Operation</div>
-		<div class="card-body">
-			<h5 class="card-title"><?php echo $title; ?></h5>
-			<p class="card-text"><?php echo $body; ?></p>
-			<a href="<?php echo $url; ?>" class="btn <?php echo $button_class;?>"><?php echo $button_text;?></a>
-		</div>
-		<div class="card-footer text-muted">Monzo API Integration</div>
-	</div>
-    <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
-  </form>
-</main>
+  <body class="text-center">    
+		<main class="container">
+			<img class="mb-4" src="assets/brand/rpi_cloud.svg" alt="" width="72" height="72">
+	    <h1 class="display-5 mb-3 fw-normal"><?php echo TITLE;?></h1>
+	    <p class="lead"><?php echo $PAGE_TITLE;?></p>
+			<div class="row">
+				<div class="col mb-3">  
+					<div class="card text-center">
+						<div class="card-header">Outcome of Refresh</div>
+						<div class="card-body">
+							<h5 class="card-title"><?php echo $title; ?></h5>
+							<p class="card-text"><?php echo $body; ?></p>
+							<a href="<?php echo $url; ?>" class="btn <?php echo $button_class;?>"><?php echo $button_text;?></a>
+						</div>
+						<div class="card-footer text-muted"><?php echo FOOTER;?></div>
+					</div>
+				</div>
 
-
-    
+		  	<div class="col mb-3">
+					<div class="card text-center" >
+						<div class="card-header">JSON Output</div>
+						<div class="card-body">
+							<p class="card-text"><?php if($display_json) echo $json_pre; ?></p>
+						</div>		
+						<div class="card-footer text-muted"><?php echo FOOTER;?></div>
+					</div>
+				</div>	
+	  	</div>
+	  	<p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+		</main>    
   </body>
 </html>
