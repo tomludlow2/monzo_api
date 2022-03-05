@@ -73,7 +73,7 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - Checks the stored authentication token against the Monzo API
 - Sends the access token as a Authorisation: Bearer
 - If the token is authorised, will display this as a badge
-- It token is invalid - requires redirection to index to restart process
+- If token is invalid - requires redirection to index to restart process
 
 **refresh_access_token.php**
 - Very similar opeartion to get_access_token (see above) but changes refresh token instead of temporary token
@@ -134,7 +134,7 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - This function can be called with ```?store=0``` to not push the transactions to the server
 - If this function is called with either ```?store=undefined or ?store=1``` then all subsequent runs on this function will return 0 rows as they will have been stored. 
 - If called with ```?format=json``` it will output the information in json for use elsewhere in the application
-- For testing / debuggin purposes, you can send ```?test_run``` and once you have set ```$YOUR_TEST_TRANS_ID``` on line ```4``` then it will send this, suggest picking one around 20 transactions earlier.
+- For testing / debugging purposes, you can send ```?test_run``` and once you have set ```$YOUR_TEST_TRANS_ID``` on line ```4``` then it will send this, suggest picking one around 20 transactions earlier.
 
 **recent_transactions.php**
 - This function queries the monzo API for any recent transactions, the monzo API limits this to 90 days
@@ -142,7 +142,7 @@ $grant_type,   $client_id,   $client_secret,   $redirect_uri,   $code
 - Calling with ```?time_filter=7_d``` would be the equivalent.
 - The expected format is ```number-of-units``` ```_``` ```h|d|w|m``` for hours, days, weeks, months]
 - It will throw a readable error in ```filter_error``` if you supply an invalid or too high range (2160h, 90d, 12w, 3m).
-- Note that 3 months is a crude 3 months, if this takes it over 90 days it wont return anything - days is best.  
+- Note that 3 months is a crude 3 months, if this takes it over 90 days it won't return anything - days is best.  
 - Similarly to ```new_transactions.php``` and other files above, you can pass: ```?format=json|page & store=0|1```
 - This then calls the same ```generate_transaction_table.php``` as before, to generate a table, or returns the json
 
@@ -194,7 +194,7 @@ Payment = Card
 **populate_receipt_page.php**
 - As receipt management is dynamic, it uses AJAX to populate itself on load rather than CGI pre-load
 - This function produces a JSON encoded readout of the most recent transactions and receipts. 
-- Pass ```$_POST['limit']``` to set the limit for both. 
+- Pass ```$$_REQUEST['limit']``` to set the limit for both. 
 
 **get_receipt.php**
 - This file calls the monzo API to collect receipt data from an allocated ```external_id``` number (which you need a copy of).

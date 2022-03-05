@@ -22,9 +22,9 @@
 	$proceed = 1;
 
 	$params = [];
-	if( isset( $_POST['title'] ) ){
-		if( $_POST['title'] != "" ){
-			$params['title'] = $_POST['title'];
+	if( isset( $_REQUEST['title'] ) ){
+		if( $_REQUEST['title'] != "" ){
+			$params['title'] = $_REQUEST['title'];
 		}else {
 			$proceed = 0;
 			$op['title_error'] = "No title provided";
@@ -34,20 +34,20 @@
 		$op['title_error'] = "No title provided";
 	}
 
-	if( isset($_POST['image_url']) ) {
-		if( filter_var($_POST['image_url'], FILTER_VALIDATE_URL) ) {
-			$params['image_url'] = $_POST['image_url'];
+	if( isset($_REQUEST['image_url']) ) {
+		if( filter_var($_REQUEST['image_url'], FILTER_VALIDATE_URL) ) {
+			$params['image_url'] = $_REQUEST['image_url'];
 		}else {
-			$params['image_url'] = "https://api.tomludlow.co.uk/banking/monzo/logo.png";
+			$params['image_url'] = WEB_ROOT . "/logo.png";
 			$op['image_url_error'] = "Provided value did not validate as a URL";
 		}		
 	}else {
 		$params['image_url'] = $DEFAULT_IMAGE_URL;
 	}
 
-	if( isset( $_POST['body']) ) {
-		if( $_POST['body'] != "") {
-			$params['body'] = $_POST['body'];
+	if( isset( $_REQUEST['body']) ) {
+		if( $_REQUEST['body'] != "") {
+			$params['body'] = $_REQUEST['body'];
 		}else {
 			$proceed = 0;
 			$op['body_error'] = "No body provided";
@@ -57,9 +57,9 @@
 		$op['body_error'] = "No body provided";
 	}
 
-	if( isset( $_POST['background_colour']) ) {
-		if( preg_match('/#([a-f0-9]{3}){1,2}\b/i', $_POST['background_colour']) ) {
-			$params['background_color'] = $_POST['background_colour'];
+	if( isset( $_REQUEST['background_colour']) ) {
+		if( preg_match('/#([a-f0-9]{3}){1,2}\b/i', $_REQUEST['background_colour']) ) {
+			$params['background_color'] = $_REQUEST['background_colour'];
 		}else {
 			$params['background_color'] = $DEFAULT_BG_COL;
 			$op['background_color_error'] = "Defaulted to white as submitted colour was not hex";
@@ -68,10 +68,10 @@
 		$params['background_color'] = $DEFAULT_BG_COL;
 	}
 
-	if( isset( $_POST['text_colour']) ) {
-		if( preg_match('/#([a-f0-9]{3}){1,2}\b/i', $_POST['text_colour']) ) {
-			$params['title_color'] = $_POST['text_colour'];
-			$params['body_color'] = $_POST['text_colour'];
+	if( isset( $_REQUEST['text_colour']) ) {
+		if( preg_match('/#([a-f0-9]{3}){1,2}\b/i', $_REQUEST['text_colour']) ) {
+			$params['title_color'] = $_REQUEST['text_colour'];
+			$params['body_color'] = $_REQUEST['text_colour'];
 		}else {
 			$params['body_color'] = $DEFAULT_TEXT_COL;
 			$params['title_color'] = $DEFAULT_TEXT_COL;
@@ -83,9 +83,9 @@
 	}
 
 	$target_url = $DEFAULT_TARGET_URL;
-	if( isset( $_POST['target_url']) ) {
-		if( filter_var($_POST['target_url'], FILTER_VALIDATE_URL) ) {
-			$target_url = $_POST['target_url'];
+	if( isset( $_REQUEST['target_url']) ) {
+		if( filter_var($_REQUEST['target_url'], FILTER_VALIDATE_URL) ) {
+			$target_url = $_REQUEST['target_url'];
 		}else {
 			$op['target_url_error'] = "Provided value did not validate as a URL";
 		}
