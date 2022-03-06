@@ -32,7 +32,7 @@
 	$account_id = get_data($conn, "account_id");
 	$authorisation = "Authorization: Bearer $access_token";
 	$url = "https://api.monzo.com/balance?account_id=$account_id";
-	$arr = Array('account_id'=>$access_id);
+	//$arr = Array('account_id'=>$access_id);
 	$curl = curl_init($url);
 	curl_setopt($curl, CURLOPT_URL, $url);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -74,7 +74,7 @@
 
 
 	#Check if the API returned appropriate information
-	if( $resp['code'] == "forbidden.insufficient_permissions") {
+	if( @$resp['code'] == "forbidden.insufficient_permissions") {
 		$op['error'] = "Access forbidden due to insufficient permissions";
 		$title = "Access Forbidden";
 		$body = $op['error'] . ". This is usually because you have not allowed access in the Monzo App. Please do so now.";

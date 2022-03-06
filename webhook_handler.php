@@ -37,6 +37,10 @@
 	$input = file_get_contents("php://input");
 	$hook = json_decode($input, true);
 	$op['php_input'] = $input;
+	$op['php_sapi_name'] = php_sapi_name();
+
+	$op['remote_ip'] = $_SERVER['REMOTE_ADDR'];
+	$op['remote_port'] = $_SERVER['REMOTE_PORT'];
 
 	//Hook contains type
 	if( $hook['type'] == "transaction.created") {
@@ -64,7 +68,7 @@
 		}
 	}
 
-	$f = fopen(DEBUG_FILE, "w");
+	$f = fopen(DEBUG_FILE, "a");
 	if( fwrite($f, json_encode($op, JSON_PRETTY_PRINT)) ) {
 		$op['written'] = "File written";
  	}else {

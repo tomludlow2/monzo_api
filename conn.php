@@ -21,6 +21,10 @@
 	*/
 
 	//Import credentials (from credentials.example.php)
+	if( php_sapi_name() == "cli" ) {
+		require("cli_fix.php");
+		$SESSION_EXEMPT = 1;
+	}
 	require("credentials.php");
 	require("session_management.php");
 

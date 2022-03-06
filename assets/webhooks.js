@@ -95,7 +95,7 @@ $(function() {
 		send_data.name = "test";
 		send_data.format = "json";
 		if( conf ) {			
-			$.post(href,{data: TEST_TRANSACTION}, function(data){			
+			$.post(href,JSON.stringify(TEST_TRANSACTION), function(data){			
 				$('#response_output').html("<pre class='text-start'>" + JSON.stringify(data, null,2) + "</pre>").addClass("bg-success");
 			}, "json");
 		}
