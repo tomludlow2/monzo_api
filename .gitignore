@@ -3,6 +3,7 @@ debug/
 credentials.php
 test.php
 hub.php
+hub_backend.php
 assets/hub.css
 assets/hub.js
 cli_test.php

@@ -76,7 +76,7 @@
 			
 		}else {
 			$rtn = "error";
-			$rtn = $select_query . mysqli_error($conn);
+			$rtn .= $select_query ."ERR:" . mysqli_error($conn);
 		}
 		return $rtn;
 	}
@@ -298,6 +298,56 @@
 			$rtn = 1;
 		}else {
 			$rtn = mysqli_error($conn);
+		}
+		return $rtn;
+	}
+
+
+	function get_balance_table($conn) {
+		//Custom balance query including LEFT JOIN to collect comments
+
+		$query = "SELECT B.`id`, B.`date`, B.`balance`, B.`total_balance`, C.`comment` FROM `monzo_daily_balances` B LEFT JOIN (
+    SELECT `comment`, `table_id` FROM `monzo_table_comments` WHERE `table_name`='daily_balance')
+    C on B.`id`= C.`table_id` ORDER BY B.`date` DESC";
+		$res = mysqli_query($conn, $query);
+		if( $res ) {
+			$rtn['status'] = 200;
+			$rows = [];
+			while ($r = mysqli_fetch_assoc($res) ) {
+				$r['human_date'] = date("d M Y", strtotime($r['date']));
+				array_push($rows, $r);
+
+			}
+			$rtn['count'] = count($rows);
+			$rtn['rows'] = $rows;
+		}else {
+			$rtn['status'] = 500;
+			$rtn = mysqli_error($conn);
+		}
+		return $rtn;
+	}
+
+	function update_comment($conn,$t_id, $i_id, $c) {
+		$query = "SELECT `id` FROM `monzo_table_comments` WHERE `table_name`='$t_id' AND `table_id`=$i_id";
+		$res_1 = mysqli_query($conn, $query);
+		$rtn = [];
+
+		if($res_1) {
+			if(mysqli_num_rows($res_1) > 0 ) {
+				$q2 = "UPDATE `monzo_table_comments` SET `comment`='$c' WHERE `table_name`='$t_id' AND `table_id`=$i_id";
+			}else {
+				$q2 = "INSERT INTO `monzo_table_comments` (`id`, `table_name`, `table_id`, `comment`) VALUES (NULL, '$t_id', $i_id, '$c')";
+			}
+			$res2 = mysqli_query($conn, $q2);
+			if($res2) {
+				$rtn['status'] = 200;
+			}else {
+				$rtn['status'] = 500;
+				$rtn['error'] = "Q2" .mysqli_error($conn);
+			}
+		}else {
+			$rtn['status'] = 500;
+			$rtn['error'] = "Q1" .mysqli_error($conn);
 		}
 		return $rtn;
 	}

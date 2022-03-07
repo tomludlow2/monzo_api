@@ -103,6 +103,7 @@
 
 			//Now add the balances to it. 
 			$ib['pot_balance'] = $pot['balance']; 
+			$ib['cover_image_url'] = $pot['cover_image_url'];
 
 			if( $store ) {
 				//Send pot current balance to the server
