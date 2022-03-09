@@ -328,15 +328,15 @@
 	}
 
 	function update_comment($conn,$t_id, $i_id, $c) {
-		$query = "SELECT `id` FROM `monzo_table_comments` WHERE `table_name`='$t_id' AND `table_id`=$i_id";
+		$query = "SELECT `id` FROM `monzo_table_comments` WHERE `table_name`='$t_id' AND `table_id`='$i_id'";
 		$res_1 = mysqli_query($conn, $query);
 		$rtn = [];
 
 		if($res_1) {
 			if(mysqli_num_rows($res_1) > 0 ) {
-				$q2 = "UPDATE `monzo_table_comments` SET `comment`='$c' WHERE `table_name`='$t_id' AND `table_id`=$i_id";
+				$q2 = "UPDATE `monzo_table_comments` SET `comment`='$c' WHERE `table_name`='$t_id' AND `table_id`='$i_id'";
 			}else {
-				$q2 = "INSERT INTO `monzo_table_comments` (`id`, `table_name`, `table_id`, `comment`) VALUES (NULL, '$t_id', $i_id, '$c')";
+				$q2 = "INSERT INTO `monzo_table_comments` (`id`, `table_name`, `table_id`, `comment`) VALUES (NULL, '$t_id', '$i_id', '$c')";
 			}
 			$res2 = mysqli_query($conn, $q2);
 			if($res2) {
@@ -352,6 +352,39 @@
 		return $rtn;
 	}
 
+
+	function get_all_transactions($conn, $limit) {
+		$pots_lookup = [];
+		global $GENERATE_TABLE_RAW_POTS;
+		foreach($GENERATE_TABLE_RAW_POTS as $pot) {
+			$pots_lookup[$pot->pot_id] = $pot->pot_name;
+		};
+		$query = "SELECT T.`id` as `row_id`, T.`transaction_id`, T.`date_created`, T.`date_settled`, T.`amount`, T.`description`, T.`merchant_id`, T.`category`, T.`notes`, C.`comment`  FROM `monzo_transactions` T LEFT JOIN (SELECT `comment`, `table_id` FROM `monzo_table_comments` WHERE `table_name`='monzo_transactions')C on T.`transaction_id`= C.`table_id` ORDER BY T.`date_created` DESC LIMIT $limit";
+		$res = mysqli_query($conn, $query);
+		$rtn = [];
+		$rtn['query'] = $query;		
+		if($res) {
+			$rtn['status'] = 200;
+			$rtn['total_rows'] = mysqli_num_rows($res);
+			$transactions = [];
+			while($r = mysqli_fetch_assoc($res) ) {
+				if( preg_match('/^pot_[a-zA-Z0-9]{22}/', $r['description']) ) {
+					$old_desc = $r['description'];
+					$r['description'] = $pots_lookup[$old_desc];
+					$r['pot_transaction'] = 1;
+				}else {
+					$r['pot_transaction'] = 0;
+				}
+				$r['human_amount'] = "£" . number_format($r['amount']/100, 2, '.', '');
+				array_push($transactions, $r);
+			}
+			$rtn['rows'] = $transactions;
+		}else {
+			$rtn['status'] = 500;
+			$rtn['error'] = mysqli_error($conn);
+		}		
+		return $rtn;
+	}
 
 	$GENERATE_TABLE_RAW_POTS = json_decode(get_data($conn, "pots_list"));
 
