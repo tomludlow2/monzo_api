@@ -1,8 +1,8 @@
 <?php
 	
 	//Defs
-	$DEFAULT_TARGET_URL = WEB_ROOT . "whoami.php";
-	$DEFAULT_IMAGE_URL = WEB_ROOT . "logo.png";
+	$DEFAULT_TARGET_URL = @WEB_ROOT . "whoami.php";
+	$DEFAULT_IMAGE_URL = @WEB_ROOT . "logo.png";
 	$DEFAULT_BG_COL = "#FFFFFF";
 	$DEFAULT_TEXT_COL = "#000000";
 
